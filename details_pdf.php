@@ -149,7 +149,7 @@
                     <td><span>4. Headquaters:</span> <?= $user['hq'] ?></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><span>5. Details and purpose of Journey (s) performed:</span> <?= $user['purpose'] ?></td>
+                    <td colspan="2"><span>5. Details and purpose of Journey (s) performed:</span> <?= $purpose ?></td>
                 </tr>
             </table>
         </div>
@@ -181,7 +181,7 @@
                 <!-- PHP code to fetch data from the MySQL table and loop through each row -->
                 <?php
                 // SQL query to retrieve data from the table
-                $sql = "SELECT * FROM `travel_information` where email = '$email'";
+                $sql = "SELECT * FROM travel_information WHERE email='$email' AND (departure_date BETWEEN '$from_date' AND '$to_date')";
 
                 $result = $con->query($sql);
 
@@ -277,7 +277,7 @@
                 <!-- PHP code to fetch data from the MySQL table and loop through each row -->
                 <?php
                 // SQL query to retrieve data from the table
-                $sql = "SELECT * FROM `hoteldetails` where email = '$email'";
+                $sql = "SELECT * FROM `hoteldetails` WHERE `email` = '$email' AND (`period_from` BETWEEN '$from_date' AND '$to_date')";
 
                 $result = $con->query($sql);
 
@@ -312,30 +312,24 @@
             <div class="content">
                 <?php
                 // SQL query to retrieve data from the table
-                $sql = "SELECT * FROM `food` WHERE `email` = '$email'";
-                // $sql1 = "SELECT * FROM `local` WHERE `email` = '$email'";
+                $food_sql = "SELECT * FROM `food` WHERE `email` = '$email' AND (`period_from` BETWEEN '$from_date' AND '$to_date')";
+
                 $user_sql = "SELECT * FROM `users` WHERE `email` = '$email'";
 
-                // Execute the query
-                $result = mysqli_query($con, $sql);
-                // $result1 = mysqli_query($con, $sql1);
-                $result2 = mysqli_query($con, $user_sql);
-                $food = mysqli_fetch_assoc($result);
-                // $local = mysqli_fetch_assoc($result1);
-                $user = mysqli_fetch_assoc($result2);
+                $food_result = $con->query($food_sql);
+                $food = $food_result->fetch_assoc();
 
+                
+                if ($food_result->num_rows == 0) {
+                    echo "<p>This is to certify that I have incurred an expenditure of N/A towards breakfast, lunch and dinner during my stay in N/A from N/A to N/A.</p>";
+                } 
                 ?>
-                <p>This is to certify that I have incurred an expenditure of Rs. <?= $food['amount'] ?>/- towards breakfast, lunch and dinner during my stay in <span class=""><?= $food['restaurant'] ?></span> from <span class="blank"><?= $food['period_from'] ?></span> to <span class="blank"><?= $food['period_to'] ?></span>.</p>
                 <br>
                 <p>Name: <span class="blank"><?= $user['username'] ?></span></p>
                 <br>
                 <p>Signature: <span class="blank"></span></p>
-                <br><br>
-                <!-- <p>Certified that I have spent an amount of Rs. <span class="blank"><?=$food['amount']?></span> /- [Rupees <span class="blank"></span> Only] per day towards Local Conveyance during the visit to <span class="blank">--------------------</span> from <span class="blank">-------------</span> to <span class="blank">-----------------------------</span>.</p>
                 <br>
-                <p>Name: <span class="blank"><?= $user['username'] ?></span></p>
-                <br>
-                <p>Signature: <span class="blank"></span></p> -->
+                <p>Date: <span class="blank"><?php echo date("Y-m-d"); ?></span></p>
             </div>
         </div>
     </div>

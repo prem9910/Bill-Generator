@@ -16,8 +16,8 @@ if (isset($_POST['new_update'])) {
     $desig = $_POST['desig'];
     $pay = $_POST['pay'];
     $hq = $_POST['hq'];
-    $purpose = $_POST['purpose'];
-    $password = $_POST['password'];
+    $emp_id = $_POST['emp_id'];
+    
 
     $update_query = "UPDATE `users` SET 
                     `username`='$username', 
@@ -26,8 +26,7 @@ if (isset($_POST['new_update'])) {
                     `address`='$address', 
                     `desig`='$desig', 
                     `pay`='$pay', 
-                    `hq`='$hq', 
-                    `purpose`='$purpose', 
+                    `hq`='$hq' 
                     WHERE `emp_id`='$emp_id'";
 
     $update_result = mysqli_query($con, $update_query);
@@ -63,10 +62,10 @@ if (isset($_POST['new_update'])) {
                 <form method="POST" enctype="multipart/form-data">
                     <div class="profile-edit-list row">
                         <?php
-                        $query = mysqli_query($con, "SELECT `emp_id`, `username`, `email`, `mobile`, `address`, `desig`, `pay`, `hq`, `purpose`, `password` FROM `users` WHERE 1") or die(mysqli_error());
+                        $query = mysqli_query($con, "SELECT `emp_id`, `username`, `email`, `mobile`, `address`, `desig`, `pay`, `hq`, `purpose`, `password` FROM `users` WHERE `email` = '$email'") or die(mysqli_error());
                         $row = mysqli_fetch_array($query);
                         ?>
-                        
+
                         <div class="weight-500 col-md-6">
                             <div class="form-group">
                                 <label>Username</label>
@@ -109,7 +108,7 @@ if (isset($_POST['new_update'])) {
                                 <input name="hq" class="form-control form-control-lg" type="text" placeholder="" required="true" autocomplete="off" value="<?php echo $row['hq']; ?>">
                             </div>
                         </div>
-                        
+
                         <div class="weight-500 col-md-6">
                             <div class="form-group">
                                 <label>Password</label>
@@ -120,7 +119,8 @@ if (isset($_POST['new_update'])) {
                             <div class="form-group">
                                 <label></label>
                                 <div class="modal-footer justify-content-center">
-                                    <button class="btn btn-primary" name="new_update" id="new_update" data-toggle="modal">Save & Update</button>
+                                    <input type="text" hidden name="emp_id" value="<?php echo $row['emp_id']; ?>">
+                                    <button type="submit" class="btn btn-primary" name="new_update" id="new_update" data-toggle="modal">Save & Update</button>
                                 </div>
                             </div>
                         </div>

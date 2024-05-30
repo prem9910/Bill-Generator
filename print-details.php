@@ -3,12 +3,20 @@ include('security.php');
 require 'dompdf/autoload.inc.php';
 use Dompdf\Dompdf;
 
+$from_date = $_GET['from'];
+$to_date = $_GET['to'];
+$purpose = $_GET['purpose'];
 $email = $_GET['email'];
+
+
+$sql_travel = mysqli_query($con,"SELECT * FROM travel_information WHERE email='$email' AND (departure_date BETWEEN '$from_date' AND '$to_date')");
+$travel = mysqli_fetch_assoc($sql_travel);
+
 $sql_users = mysqli_query($con,"SELECT * FROM users WHERE email='$email'");
 $user = mysqli_fetch_assoc($sql_users);
 
-$sql_travel = mysqli_query($con,"SELECT * FROM travel_information WHERE email='$email'");
-$travel = mysqli_fetch_assoc($sql_travel);
+// $sql_travel = mysqli_query($con,"SELECT * FROM travel_information WHERE email='$email'");
+// $travel = mysqli_fetch_assoc($sql_travel);
 
 $sql_hotel = mysqli_query($con,"SELECT * FROM hoteldetails WHERE email='$email'");
 $hotel = mysqli_fetch_assoc($sql_hotel);
